@@ -18,9 +18,7 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
+  
   // Disable source maps in development to fix the warnings
   productionBrowserSourceMaps: false,
   // Optional: Disable TypeScript and ESLint during build if needed
