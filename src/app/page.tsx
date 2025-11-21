@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <div className="text-center">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
-        Welcome to Student Result Management System
+        Welcome to Mathal Int'l School Student Result Portal
       </h1>
       <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
         A comprehensive platform for teachers to manage student scores and for students to access their results efficiently.
@@ -130,10 +130,10 @@ export default function Home() {
           </div>
           <h3 className="text-xl font-semibold text-gray-800 mb-2">Quick Stats</h3>
           <div className="text-gray-600 space-y-2">
-            <p>200+ Students Capacity</p>
-            <p>20+ Teachers Capacity</p>
+            <p>Students Capacity</p>
+            <p>Teachers Capacity</p>
             <p>Multiple Classes</p>
-            <p>Automatic Admission Numbers</p>
+            {/* <p>Automatic Admission Numbers</p> */}
           </div>
         </div>
       </div>

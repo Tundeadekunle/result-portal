@@ -62,10 +62,17 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-gray-50 min-h-screen">
        
-<nav className="bg-blue-600 text-white shadow-lg">
+<nav className="bg-[#000043] text-white shadow-lg">
   <div className="container mx-auto px-4">
     <div className="flex justify-between items-center h-16">
-      <Link href="/" className="text-xl font-bold">Result Management System</Link>
+      <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center overflow-hidden">
+        <img 
+          src="/mathal-logo.jpg" 
+          alt="Mathal International School Logo" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <Link href="/" className="text-xl font-bold">Result Portal</Link>
       <div className="flex space-x-4">
         <Link href="/" className="hover:text-blue-200 transition-colors">Home</Link>
         <Link href="/teachers" className="hover:text-blue-200 transition-colors">Teachers</Link>
