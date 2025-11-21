@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// generator client {
+//   provider = "prisma-client"
+//   output   = "../src/generated/prisma"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+
+
+
+
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacher Teacher?
+  student Student?
+
+  @@map("users")
+}
+
+enum UserRole {
+  TEACHER
+  STUDENT
+  ADMIN
+}
+
+// model Teacher {
+//   id        String   @id @default(cuid())
+//   userId    String   @unique
+//   name      String
+//   email     String   @unique
+//   subjects  String[]
+//   classes   String[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   scores Score[]
+
+//   @@map("teachers")
+// }
+
+
+
+
+
+
+model Teacher {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  name      String
+  email     String   @unique
+  subjects  String[]
+  classes   String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scores    Score[]
+  students  Student[] // Teachers can have multiple students
+
+  @@map("teachers")
+}
+
+
+
+
+// model Student {
+//   id        String   @id @default(cuid())
+//   userId    String   @unique
+//   studentId String   @unique
+//   name      String
+//   email     String   @unique
+//   class     String
+//   subjects  String[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   scores Score[]
+
+//   @@map("students")
+// }
+
+
+
+
+
+
+model Student {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  studentId    String   @unique // Admission number
+  name         String
+  email        String   @unique
+  class        String
+  subjects     String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  teacherId    String?  // Which teacher added this student
+  admissionDate DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  scores  Score[]
+
+  @@map("students")
+}
+
+
+
+// Add this model for tracking admission numbers
+model AdmissionCounter {
+  id        String   @id @default(cuid())
+  prefix    String   @unique // e.g., "ADM2024"
+  counter   Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admission_counters")
+}
+
+
+
+
+model Score {
+  id           String   @id @default(cuid())
+  studentId    String
+  subject      String
+  caScore      Int      @default(0)
+  examScore    Int      @default(0)
+  totalScore   Int
+  grade        String
+  teacherId    String
+  term         String
+  academicYear String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, subject, term, academicYear])
+  @@map("scores")
+}
+
+model AcademicYear {
+  id        String   @id @default(cuid())
+  year      String   @unique
+  isCurrent Boolean  @default(false)
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("academic_years")
+}
+
+model Term {
+  id           String   @id @default(cuid())
+  name         String
+  academicYear String
+  startDate    DateTime
+  endDate      DateTime
+  isCurrent    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([name, academicYear])
+  @@map("terms")
+}
